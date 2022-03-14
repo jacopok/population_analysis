@@ -1,2 +1,4 @@
-# population_analysis
-Analysis of the outputs of the MOBSE and FASTCLUSTER codes.
+# Population Analysis
+
+Analysis of the outputs of the MOBSE (and maybe FASTCLUSTER) code.
+
