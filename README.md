@@ -17,3 +17,8 @@ This will install the module `population_analysis` in the current folder.
 Then, you can make your own folder and place inside it some scripts, 
 which can import functions from `population_analysis`. 
 For an example, see the folder `jacopo/`. 
+
+After you have made some changes, you can add the files you modified with 
+`git add <files list>`, commit them with `git commit -m "some message` 
+and push the changes with `git push`. 
+
