@@ -12,4 +12,8 @@ then, move into the folder (`cd population_analysis`) and run
 pip install .
 ```
 
-This will install the module `population_analysis` 
+This will install the module `population_analysis` in the current folder. 
+
+Then, you can make your own folder and place inside it some scripts, 
+which can import functions from `population_analysis`. 
+For an example, see the folder `jacopo/`. 
