@@ -1,14 +1,28 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def read_file(filename: str):
+def read_file(filename: str) -> tuple[list[str], np.ndarray]:
+    """Read the given file and return
+    its headers, as a list of strings, as well as the corresponding
+    data as a numpy array.
+
+    Parameters
+    ----------
+    filename : str
+
+    Returns
+    -------
+    headers: list[str]
+    numeric_data: np.ndarray
+        The shape of this array is (n_data, n_parameters).
+    """
     
     bad_strings = []
     
     def is_allowed(value: str):
         
         if value in bad_strings:
-            return False       
+            return False
         
         try:
             float(value)
@@ -30,12 +44,3 @@ def read_file(filename: str):
     
     return header, numeric_data
     
-if __name__ == '__main__':
-    # example usage
-    # if you have cloned this repo in the same folder as mobse_open
-
-    header, data = read_file('../mobse_open/output/A1.0/0.02/mergers.out')
-
-    print(header)
-    plt.hist2d(data[:, 1], data[:, 2], bins=100)
-    plt.show()
