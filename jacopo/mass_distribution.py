@@ -7,7 +7,7 @@ from scipy.stats import gaussian_kde
 from pathlib import Path
 
 DATA_PATH = Path(__file__).parent / 'data'
-Zs = ['1e-4', '2e-4', '6e-4', '11e-4', '2e-3', '36e-4', '63e-4', '112e-4', '2e-2']
+Zs = ['1e-4', '2e-4', '6e-4', '11e-4', '2e-3', '36e-4', '48e-4', '63e-4', '83e-4', '112e-4', '2e-2']
 
 
 def plot_mass_contours(mass_1, mass_2, color):
