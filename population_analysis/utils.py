@@ -1,5 +1,13 @@
+import subprocess
+import os
+from pathlib import Path
+
 import numpy as np
 import matplotlib.pyplot as plt
+
+from .input_manipulation import read_popsyn, write_popsyn, change_metallicity
+
+MOBSE_PATH = Path(__file__).parent.parent.parent / 'mobse_open'
 
 def read_file(filename: str) -> dict[str, np.ndarray]:
     """Read the given file and return
@@ -41,3 +49,25 @@ def read_file(filename: str) -> dict[str, np.ndarray]:
             return_dict[name] = np.array(values, dtype=object)
     
     return return_dict
+
+def run_mobse_changing_metallicity(mobse_path: Path = MOBSE_PATH):
+    
+    this_dir = os.getcwd()
+    
+    os.chdir(mobse_path / 'input')
+    rows = read_popsyn('popsyn.in')
+    change_metallicity(rows, .02)
+    write_popsyn(rows, 'popsyn.in')
+    
+    os.chdir(mobse_path)
+    
+    subprocess.run(['bash', 'popsyn_runs.sh'])
+    
+    for out_file in ['evol_mergers.out', 'mergers.out']:
+        subprocess.run([
+            'cp', 
+            f'output/A1.0/0.002/{out_file}',  
+            f'{this_dir}'
+        ])
+    
+    os.chdir(this_dir)
