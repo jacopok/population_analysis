@@ -60,7 +60,7 @@ if __name__ == '__main__':
 
     for Z in Zs:
         data = read_file(DATA_PATH / f'mergers_Z={Z}.out')
-        plot_total_mass_ratio_contours(data['m1'], data['m2'], cmap(norm(float(Z))))
+        plot_total_mass_ratio_contours(data['m1form'], data['m2form'], cmap(norm(float(Z))))
 
     plt.colorbar(ScalarMappable(cmap=cmap, norm=norm), label='Metallicity $Z$')
 
