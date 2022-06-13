@@ -50,24 +50,32 @@ def read_file(filename: str) -> dict[str, np.ndarray]:
     
     return return_dict
 
-def run_mobse_changing_metallicity(mobse_path: Path = MOBSE_PATH):
+def run_mobse_changing_metallicity(
+    metallicity: float, 
+    mobse_path: Path = MOBSE_PATH, 
+    out_files: tuple[str] = ('evol_mergers.out', 'mergers.out')):
+    """This function will switch to the mobse path, run mobse, 
+    and then copy over the files specified as out_files
+    (by default evol_mergers.out and mergers.out)
+    to the current folder, prepending an indication of the metallicity used.
+    """
     
     this_dir = os.getcwd()
     
     os.chdir(mobse_path / 'input')
     rows = read_popsyn('popsyn.in')
-    change_metallicity(rows, .02)
+    change_metallicity(rows, metallicity)
     write_popsyn(rows, 'popsyn.in')
     
     os.chdir(mobse_path)
     
     subprocess.run(['bash', 'popsyn_runs.sh'])
     
-    for out_file in ['evol_mergers.out', 'mergers.out']:
+    for out_file in out_files:
         subprocess.run([
             'cp', 
             f'output/A1.0/0.002/{out_file}',  
-            f'{this_dir}'
+            f'{this_dir}/Z_{metallicity:.04f}{out_file}'
         ])
     
     os.chdir(this_dir)
