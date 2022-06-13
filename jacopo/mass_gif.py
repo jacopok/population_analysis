@@ -12,8 +12,8 @@ DATA_PATH = Path(__file__).parent / 'data'
 
 def plot_frame(data):
 
-    total_masses = data['m1'] + data['m2']
-    mass_ratios = np.maximum(data['m1'] / data['m2'], data['m2'] / data['m1'])
+    total_masses = data['m1form'] + data['m2form']
+    mass_ratios = np.maximum(data['m1form'] / data['m2form'], data['m2form'] / data['m1form'])
     
     var_1, var_2 = total_masses, mass_ratios
 
@@ -50,7 +50,7 @@ if __name__ == '__main__':
     for i, Z in enumerate(Zs):
         data = read_file(DATA_PATH / f'mergers_Z={Z}.out')
         plot_frame(data)
-        plt.title(f'Z={float(Z):.1e}, N_mergers={len(data["m1"])}')
+        plt.title(f'Z={float(Z):.1e}, N_mergers={len(data["m1form"])}')
         for j in range(repeat_frame_times):
             plt.savefig(f'frames/{repeat_frame_times*i + j}.png')
         plt.close()
@@ -59,5 +59,5 @@ if __name__ == '__main__':
     
     with imageio.get_writer(f'{gif_name}.gif', mode='I') as writer:
         for filename in [f'frames/{i}.png' for i in range(repeat_frame_times*len(Zs))]:
-            image = imageio.imread(filename)
+            image = imageio.v3.imread(filename)
             writer.append_data(image)
