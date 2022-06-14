@@ -4,12 +4,13 @@ from pathlib import Path
 
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
 
 from .input_manipulation import read_popsyn, write_popsyn, change_metallicity
 
 MOBSE_PATH = Path(__file__).parent.parent.parent / 'mobse_open'
 
-def read_file(filename: str) -> dict[str, np.ndarray]:
+def read_file(filename: str) -> pd.DataFrame:
     """Read the given file and return
     its headers, as a list of strings, as well as the corresponding
     data as a numpy array.
@@ -48,7 +49,24 @@ def read_file(filename: str) -> dict[str, np.ndarray]:
         except ValueError:
             return_dict[name] = np.array(values, dtype=object)
     
-    return return_dict
+    return pd.DataFrame.from_dict(return_dict)
+
+def select_by_common_envelope(df: pd.DataFrame):
+    
+    indices_common_envelope: list[int] = []
+    
+    for _, row in df.iterrows():
+        if row['label'] == 'COMENV':
+            indices_common_envelope.append(row['#ID'])
+    
+    mergers = df[df['label'] == 'COELESCE']
+    
+    has_comenv = np.vectorize(lambda index: index in indices_common_envelope)
+    
+    mergers_comenv = mergers[has_comenv(mergers['#ID'])]
+    mergers_no_comenv = mergers[np.logical_not(has_comenv(mergers['#ID']))]
+    
+    return mergers_comenv, mergers_no_comenv
 
 def run_mobse_changing_metallicity(
     metallicity: float, 
