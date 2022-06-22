@@ -80,6 +80,12 @@ def run_mobse_changing_metallicity(
     
     this_dir = os.getcwd()
     
+    for out_file in out_files:
+        fname = f'{this_dir}/Z_{metallicity:.04f}{out_file}'
+        if os.path.exists(fname):
+            print(f'Metallicity {metallicity} already computed')
+            return None
+    
     os.chdir(mobse_path / 'input')
     rows = read_popsyn('popsyn.in')
     change_metallicity(rows, metallicity)
