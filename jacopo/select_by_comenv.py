@@ -34,3 +34,13 @@ for Z in np.arange(1, 10_000) / 10_000:
     print(f'Mergers: {len(ce) + len(nce)}')
     print()
 
+if __name__ == '__main__':
+    import matplotlib.pyplot as plt
+    Zs = np.array(Zs)
+    n_comenv = np.array(n_comenv)
+    n_tot = np.array(n_tot)
+    
+    plt.plot(Zs, 1-n_comenv / n_tot)
+    plt.xlabel('Metallicity $Z$')
+    plt.ylabel('Fraction of mergers without common envelope')
+    plt.savefig('mergers_no_comenv.png')
