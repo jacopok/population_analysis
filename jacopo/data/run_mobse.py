@@ -7,7 +7,7 @@ metallicities = np.concatenate((
     np.arange(1, 20, step=1),
     np.arange(20, 50, step=2),
     np.arange(50, 200, step=4),
-    np.arange(200, 5000, step=8),
+    np.arange(200, 500, step=8),
 )) / 10_000
 
 print(
