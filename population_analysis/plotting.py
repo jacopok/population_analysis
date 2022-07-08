@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import ffmpeg
 
-from .utils import read_file
+from .utils import read_file, select_BBH
 
 Zs = np.arange(1, 1_000) / 10_000
 
@@ -12,16 +12,21 @@ DATA_PATH = Path(__file__).parent.parent / 'jacopo' / 'data'
 
 def plot_and_save(plotting_func):
     plotting_func()
-    this_folder = Path(__file__).parent
-    plt.savefig(this_folder / (str(plotting_func.__name__).split(sep='.')[0] + '.pdf'), bbox_inches='tight', pad_inches = 0)
+    this_folder = Path()
+    plt.savefig(
+        this_folder / (str(plotting_func.__name__).split(sep='.')[0] + '.pdf'), 
+        bbox_inches='tight', 
+        pad_inches = 0
+    )
     plt.close()
 
 def make_vid_varying_metallicity(
     plot_frame: callable,
     vid_name: str, 
-    framerate: int = 4,
-    frame_title: callable = lambda data: '',
+    framerate: int = 2,
+    frame_title: callable = lambda data : f', {len(data)} mergers',
     data_path: Path = DATA_PATH,
+    selector: callable = select_BBH,
     ):
     
     this_folder = Path().resolve()
@@ -32,7 +37,7 @@ def make_vid_varying_metallicity(
     
     for i, Z in tqdm(enumerate(Zs)):
         try:
-            data = read_file(DATA_PATH / f'Z_{Z:.4f}mergers.out')
+            data = selector(read_file(DATA_PATH / f'Z_{Z:.4f}mergers.out'))
         except FileNotFoundError:
             continue
 
