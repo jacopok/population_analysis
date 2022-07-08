@@ -49,25 +49,36 @@ def read_file(filename: str) -> pd.DataFrame:
         except ValueError:
             return_dict[name] = np.array(values, dtype=object)
     
-    df = pd.DataFrame.from_dict(return_dict)
-    
-    # select BBH
-    return df[(df['k1form'] == 14) & (df['k2form'] == 14)]
+    return pd.DataFrame.from_dict(return_dict)
 
-def select_by_common_envelope(df: pd.DataFrame):
+def select_BBH(data):
+    return data[(data['k1form'] == 14) & (data['k2form'] == 14)]
+
+def select_BNS(data):
+    return data[(data['k1form'] == 13) & (data['k2form'] == 13)]
+
+def select_NSBH(data):
+    return data[
+        ((data['k1form'] == 14) & (data['k2form'] == 13))
+        |
+        ((data['k1form'] == 13) & (data['k2form'] == 14))
+    ]
+
+
+def select_by_common_envelope(df_evol: pd.DataFrame, df_merg: pd.DataFrame):
     
     indices_common_envelope: list[int] = []
     
-    for _, row in df.iterrows():
+    for _, row in df_evol.iterrows():
         if row['label'] == 'COMENV':
             indices_common_envelope.append(row['#ID'])
     
-    mergers = df[df['label'] == 'COELESCE']
+    # mergers = df[df['label'] == 'COELESCE']
     
     has_comenv = np.vectorize(lambda index: index in indices_common_envelope)
     
-    mergers_comenv = mergers[has_comenv(mergers['#ID'])]
-    mergers_no_comenv = mergers[np.logical_not(has_comenv(mergers['#ID']))]
+    mergers_comenv = df_merg[has_comenv(df_merg['#ID'])]
+    mergers_no_comenv = df_merg[np.logical_not(has_comenv(df_merg['#ID']))]
     
     return mergers_comenv, mergers_no_comenv
 
