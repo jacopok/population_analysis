@@ -6,7 +6,6 @@ from scipy.stats import gaussian_kde
 import imageio
 from tqdm import tqdm
 
-from population_analysis.utils import read_file
 from population_analysis.plotting import make_vid_varying_metallicity
 
 def plot_frame_kde_total_mass_ratio(data):
@@ -52,7 +51,7 @@ def plot_frame_histograms(data):
     bins = np.linspace(0.3, np.log10(150), num=40)
     
     plt.hist(np.log10(mass_1), bins=bins, alpha=.5, label='Primary mass')
-    plt.hist(np.log10(mass_2), bins=bins, alpha=.5, label='Secondary mass')    
+    plt.hist(np.log10(mass_2), bins=bins, alpha=.5, label='Secondary mass')
 
     plt.yscale('log')
     plt.ylim(1/2, 500)
