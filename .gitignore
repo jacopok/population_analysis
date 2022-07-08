@@ -3,3 +3,5 @@
 *.gif
 *.pyc
 .python-version
+jacopo/data/*.out
+*.npy
