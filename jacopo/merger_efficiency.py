@@ -52,7 +52,7 @@ def compute_n_by_comenv(selector: callable = select_BBH):
 
 def merger_efficiency():
     
-    total_mass = 4313370.713
+    total_mass = 4_313_370.713
     
     selectors = {
         'BBH': select_BBH ,
