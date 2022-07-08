@@ -49,7 +49,10 @@ def read_file(filename: str) -> pd.DataFrame:
         except ValueError:
             return_dict[name] = np.array(values, dtype=object)
     
-    return pd.DataFrame.from_dict(return_dict)
+    df = pd.DataFrame.from_dict(return_dict)
+    
+    # select BBH
+    return df[(df['k1form'] == 14) & (df['k2form'] == 14)]
 
 def select_by_common_envelope(df: pd.DataFrame):
     
