@@ -5,16 +5,9 @@ import matplotlib.ticker as mticker
 from scipy.stats import gaussian_kde
 import imageio
 from tqdm import tqdm
-import ffmpeg
-
 
 from population_analysis.utils import read_file
-
-from make_all_figures import rc
-
-Zs = np.arange(1, 10_000) / 10_000
-
-DATA_PATH = Path(__file__).parent / 'data'
+from population_analysis.plotting import make_vid_varying_metallicity
 
 def plot_frame_kde_total_mass_ratio(data):
 
@@ -64,7 +57,7 @@ def plot_frame_histograms(data):
     plt.yscale('log')
     plt.ylim(1/2, 500)
     def tick_label(x, pos):
-        return f'{10**x:.0f}'
+        return f'{10**x:.1f}'
 
     plt.xlabel('Mass [$M_{\odot}$]')
     plt.ylabel('Mergers per logarithmic mass bin')
@@ -72,49 +65,9 @@ def plot_frame_histograms(data):
 
     plt.legend()
 
-def make_gif_varying_metallicity(
-    plot_frame: callable,
-    gif_name: str, 
-    framerate: int = 4,
-    frame_title: callable = lambda data: '',
-    ):
-    
-    this_folder = Path(__file__).parent
-    frames_folder = this_folder / f'frames_{gif_name}'
-    
-    if not frames_folder.exists():
-        frames_folder.mkdir()
-    
-    for i, Z in tqdm(enumerate(Zs)):
-        try:
-            data = read_file(DATA_PATH / f'Z_{Z:.4f}mergers.out')
-        except FileNotFoundError:
-            continue
-
-        plot_frame(data)
-
-        plt.title(f'Z={float(Z):.4f}' + frame_title(data))
-        
-        plt.savefig(frames_folder / f'{i:04}.png')
-        plt.close()
-    
-    (
-        ffmpeg
-        .input(str(frames_folder/'*.png'), pattern_type='glob', framerate=framerate)
-        .output(str(this_folder / f'{gif_name}.mp4'))
-        .run()
-    )
-
-    
-    for img in frames_folder.iterdir():
-        img.unlink()
-    frames_folder.rmdir()
-
-
 if __name__ == '__main__':
 
-    make_gif_varying_metallicity(
+    make_vid_varying_metallicity(
         plot_frame_histograms, 
         'mass_histograms', 
-        # lambda data : f'N_mergers={len(data["m1form"])}'
     )
