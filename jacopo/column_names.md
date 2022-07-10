@@ -106,18 +106,3 @@ the total ZAMS mass is $4313370.713 M_{\odot}$, divided into
 2810624.5673 for primaries and
 1502746.1457 for secondaries,
 for 200k total mergers.
-
-Quick check: the primary mass function should be $m \propto m^{-2.3}$ from 5 to 150Msun.
-The mean mass should then be 
-$$ \langle m \rangle 
-= \frac{\int m f(m) \text{d} m}{\int f(m) \text{d} m}
-= \frac{\int m^{-1.3} \text{d} m}{\int m^{-2.3} \text{d} m}
-= \frac{-1.3}{-0.3} \frac{(150^{-0.3} - 5^{-0.3})}{(150^{-1.3} - 5^{-1.3})} M_{\odot}
-\approx 14.025 M_{\odot}
-$$
-
-Multiplying this by 200k yields 2805020.22, correct to within $0.2\%$.
-(Also, the error rate is perfectly compatible with $\sqrt{200 000} \approx 450$!)
-
-I didn't do the check for the secondaries.
-
