@@ -22,6 +22,9 @@ DATA_PATH = Path(__file__).parent.parent / 'jacopo' / 'data'
 temp_filenames = {f'{Z:.4f}': DATA_PATH / f'Z_{Z:.4f}mergers.out' for Z in Zs}
 FILENAMES = {Z: f for Z, f in temp_filenames.items() if f.exists()}
 
+temp_evol_filenames = {f'{Z:.4f}': DATA_PATH / f'Z_{Z:.4f}evol_mergers.out' for Z in Zs}
+EVOL_FILENAMES = {Z: f for Z, f in temp_evol_filenames.items() if f.exists()}
+
 def plot_and_save(plotting_func, name_addon: str = ''):
     plotting_func()
     this_folder = Path()
@@ -34,7 +37,7 @@ def plot_and_save(plotting_func, name_addon: str = ''):
 
 def make_vid_varying_metallicity(
     plot_frame: callable,
-    vid_name: str, 
+    vid_name: str,
     framerate: int = 2,
     frame_title: callable = lambda data : f', {len(data)} mergers',
     filenames: dict[str, Path] = FILENAMES,
