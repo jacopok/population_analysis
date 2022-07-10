@@ -64,6 +64,11 @@ def select_NSBH(data):
         ((data['k1form'] == 13) & (data['k2form'] == 14))
     ]
 
+selectors = {
+    'BBH': select_BBH, 
+    'BNS': select_BNS, 
+    'NSBH': select_NSBH
+}
 
 def select_by_common_envelope(df_evol: pd.DataFrame, df_merg: pd.DataFrame):
     
