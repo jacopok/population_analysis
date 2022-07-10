@@ -6,7 +6,8 @@ from scipy.stats import gaussian_kde
 import imageio
 from tqdm import tqdm
 
-from population_analysis.plotting import make_vid_varying_metallicity
+from population_analysis.plotting import make_vid_varying_metallicity, colors, plot_at_metallicity
+from population_analysis.utils import selectors
 
 def plot_frame_kde_total_mass_ratio(data):
 
@@ -64,9 +65,75 @@ def plot_frame_histograms(data):
 
     plt.legend()
 
+def frame_scatterplot(data):
+
+    for name, selector in selectors.items():
+        sub_data = selector(data)
+        mass_1 = sub_data['m1form']
+        mass_2 = sub_data['m2form']
+
+        plt.scatter(mass_1, mass_2, s=1, label=name, color=colors[name])
+        
+        plt.plot([1.2, 1.2], [1.2, 80], lw=.5, ls='--', c='black')
+        plt.plot([1.2, 80], [1.2, 1.2], lw=.5, ls='--', c='black')
+
+        plt.yscale('log')
+        plt.xscale('log')
+        plt.xlim(1, 80)
+        plt.ylim(1, 80)
+        
+        r = np.linspace(1, 80)
+        plt.plot(r, r, lw=.5, ls=':', c='black')
+
+        plt.xlabel('Primary mass [$M_{\odot}$]')
+        plt.ylabel('Secondary mass [$M_{\odot}$]')
+    plt.legend()
+
+def frame_initial_final(data):
+
+    for name, selector in selectors.items():
+        sub_data = selector(data)
+        
+        mass_1_in = sub_data['min1']
+        mass_2_in = sub_data['min2']
+
+        mass_1 = sub_data['m1form']
+        mass_2 = sub_data['m2form']
+
+        plt.scatter(mass_1_in, mass_1, s=1, label=f'{name} primaries', color=colors[name], marker='^')
+        plt.scatter(mass_2_in, mass_2, s=1, label=f'{name} secondaries', color=colors[name], marker='o', alpha=.3)
+        
+        plt.yscale('log')
+        plt.xscale('log')
+        plt.xlim(2, 180)
+        plt.ylim(1, 80)
+        
+        r = np.linspace(1, 80)
+        plt.plot(r, r, lw=.5, ls=':', c='black')
+
+        plt.xlabel('ZAMS mass [$M_{\odot}$]')
+        plt.ylabel('CO mass [$M_{\odot}$]')
+    plt.legend()
+    plt.grid(which='both')
+
 if __name__ == '__main__':
 
-    make_vid_varying_metallicity(
-        plot_frame_histograms, 
-        'mass_histograms', 
-    )
+    # make_vid_varying_metallicity(
+    #     plot_frame_histograms, 
+    #     'mass_histograms', 
+    # )
+    # make_vid_varying_metallicity(
+    #     plot_frame_scatterplot, 
+    #     'mass_scatterplot',
+    #     selector = lambda x : x
+    # )
+    # make_vid_varying_metallicity(
+    #     frame_initial_final, 
+    #     'mass_initial_final',
+    #     selector = lambda x : x
+    # )
+    
+    plot_at_metallicity(frame_initial_final, selector = lambda x : x)
+    plot_at_metallicity(frame_scatterplot, selector = lambda x : x)
+
+

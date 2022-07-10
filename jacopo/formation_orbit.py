@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 from scipy.optimize import fsolve
 
-from population_analysis.plotting import make_vid_varying_metallicity
+from population_analysis.plotting import make_vid_varying_metallicity, plot_at_metallicity
 
 
 def logit(x):
@@ -73,7 +73,7 @@ def plot_frame_merger_eccentricity(data):
     plot_eccentricity(e_new, bins)
     plt.xlabel('Merger eccentricity [dimensionless, logit scale]')
 
-def plot_frame_scatter_eccentricity(data):
+def frame_scatter_eccentricity(data):
 
     merger_eccentricity = get_merger_eccentricities(data)
     ecc = data['eccform']
@@ -87,7 +87,7 @@ def plot_frame_scatter_eccentricity(data):
     plt.xlim(1e-4, .999)
     plt.ylim(1e-11, 1e-5)
 
-def plot_frame_scatter_initial_a(data):
+def frame_scatter_initial_a(data):
 
     merger_eccentricity = get_merger_eccentricities(data)
     
@@ -137,20 +137,24 @@ def plot_frame_scatter_a_ratio_to_merger(data):
 if __name__ == '__main__':
     # make_vid_varying_metallicity(plot_frame_eccentricity, 'eccentricity')
     # make_vid_varying_metallicity(plot_frame_merger_eccentricity, 'merger_eccentricity')
-    make_vid_varying_metallicity(
-        plot_frame_scatter_eccentricity, 
-        'merger_eccentricity_scatter',
-    )
+    # make_vid_varying_metallicity(
+    #     frame_scatter_eccentricity, 
+    #     'merger_eccentricity_scatter',
+    # )
+    plot_at_metallicity(frame_scatter_eccentricity)
     
-    make_vid_varying_metallicity(
-        plot_frame_scatter_initial_a,
-        'merger_eccentricity_vs_a'
-    )
-    make_vid_varying_metallicity(
-        plot_frame_scatter_mass,
-        'merger_eccentricity_vs_mass'
-    )
-    make_vid_varying_metallicity(
-        plot_frame_scatter_a_ratio_to_merger,
-        'merger_eccentricity_vs_a_ratio_to_merger'
-    )
+    # make_vid_varying_metallicity(
+    #     frame_scatter_initial_a,
+    #     'merger_eccentricity_vs_a'
+    # )
+    
+    plot_at_metallicity(frame_scatter_initial_a)
+    
+    # make_vid_varying_metallicity(
+    #     plot_frame_scatter_mass,
+    #     'merger_eccentricity_vs_mass'
+    # )
+    # make_vid_varying_metallicity(
+    #     plot_frame_scatter_a_ratio_to_merger,
+    #     'merger_eccentricity_vs_a_ratio_to_merger'
+    # )
