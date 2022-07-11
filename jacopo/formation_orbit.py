@@ -4,6 +4,8 @@ import matplotlib.ticker as mticker
 from scipy.optimize import fsolve
 
 from population_analysis.plotting import make_vid_varying_metallicity, plot_at_metallicity
+from population_analysis.utils import selectors
+from population_analysis.common_envelope import split_by_comenv
 
 
 def logit(x):
@@ -134,6 +136,43 @@ def plot_frame_scatter_a_ratio_to_merger(data):
     plt.xlim(1e3, 1e6)
     plt.ylim(1e-11, 1e-5)
 
+def frame_scatter_initial_a(data):
+
+    merger_eccentricity = get_merger_eccentricities(data)
+    
+    plt.scatter(data['sepform'], merger_eccentricity, s=.5)
+    plt.xscale('log')
+    plt.yscale('logit')
+    
+    plt.xlabel('Initial separation [$R_{\odot}$, log scale]')
+    plt.ylabel('Merger eccentricity [dimensionless, logit scale]')
+    
+    
+    plt.xlim(.2, 100)
+    plt.ylim(1e-11, 1e-5)
+
+def frame_scatter_initial_a_by_comenv(data, Z: str='0.0001'):
+
+    ce, nce = split_by_comenv(data, Z)
+
+    for df, color, name in [
+        (ce, 'black', 'Common envelope'), 
+        (nce, 'blue', 'No common envelope')
+    ]:
+
+        merger_eccentricity = get_merger_eccentricities(df)
+        plt.scatter(df['sepform'], merger_eccentricity, s=.5, color=color, label=name)
+
+    plt.xscale('log')
+    plt.yscale('logit')
+    
+    plt.xlabel('Initial separation [$R_{\odot}$, log scale]')
+    plt.ylabel('Merger eccentricity [dimensionless, logit scale]')
+    
+    plt.xlim(.2, 100)
+    plt.ylim(1e-11, 1e-5)
+    plt.legend()
+
 if __name__ == '__main__':
     # make_vid_varying_metallicity(plot_frame_eccentricity, 'eccentricity')
     # make_vid_varying_metallicity(plot_frame_merger_eccentricity, 'merger_eccentricity')
@@ -141,6 +180,7 @@ if __name__ == '__main__':
     #     frame_scatter_eccentricity, 
     #     'merger_eccentricity_scatter',
     # )
+    
     plot_at_metallicity(frame_scatter_eccentricity)
     
     # make_vid_varying_metallicity(
@@ -149,6 +189,7 @@ if __name__ == '__main__':
     # )
     
     plot_at_metallicity(frame_scatter_initial_a)
+    plot_at_metallicity(frame_scatter_initial_a_by_comenv)
     
     # make_vid_varying_metallicity(
     #     plot_frame_scatter_mass,
