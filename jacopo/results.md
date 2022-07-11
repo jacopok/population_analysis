@@ -109,7 +109,6 @@ that also formed with __unusually small initial radii__.
 
 What are these smaller radii due to?
 Is this feature somehow correlated with the __presence of a common envelope phase__?
-NO, although the mergers with a common envelope are all in the high-initial-separation region,
+NO, although the mergers with a common envelope are all in the low-initial-separation region,
 they also constitute the bulk of the rest of the distribution.
 Having had a common envelope is a requirement for being in that cluster, not a sufficient condition.
-
