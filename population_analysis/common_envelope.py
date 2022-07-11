@@ -21,14 +21,7 @@ def select_by_common_envelope(df_evol: pd.DataFrame, df_merg: pd.DataFrame):
     
     return mergers_comenv, mergers_no_comenv
 
-def get_data_by_comenv():
-    result = {}
+def split_by_comenv(data, Z: str):
     
-    for Z, filename in FILENAMES.items():
-        mergers_comenv, mergers_no_comenv = select_by_common_envelope(
-            read_file(EVOL_FILENAMES[Z]), read_file(filename))
-    
-        result[Z][True] = mergers_comenv
-        result[Z][False] = mergers_no_comenv
-    
-    return result
+    df_evol = read_file(EVOL_FILENAMES[Z])
+    return select_by_common_envelope(df_evol, data)
