@@ -8,6 +8,8 @@ colorlinks: true
 linkcolor: blue
 ---
 
+[//]: # (Compile this with: pandoc -f markdown-implicit_figures results.md -o results.pdf)
+
 ## Initial setup
 
 We perform several runs of the MOBSE code, 
