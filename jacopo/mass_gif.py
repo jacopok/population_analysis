@@ -6,7 +6,7 @@ from scipy.stats import gaussian_kde
 import imageio
 from tqdm import tqdm
 
-from population_analysis.plotting import make_vid_varying_metallicity, colors, plot_at_metallicity
+from population_analysis.plotting import make_vid_varying_metallicity, colors, plot_at_desired_mets
 from population_analysis.utils import selectors
 
 def plot_frame_kde_total_mass_ratio(data):
@@ -133,7 +133,7 @@ if __name__ == '__main__':
     #     selector = lambda x : x
     # )
     
-    plot_at_metallicity(frame_initial_final, selector = lambda x : x)
-    plot_at_metallicity(frame_scatterplot, selector = lambda x : x)
+    plot_at_desired_mets(frame_initial_final, selector = lambda x : x)
+    plot_at_desired_mets(frame_scatterplot, selector = lambda x : x)
 
 

@@ -25,11 +25,11 @@ FILENAMES = {Z: f for Z, f in temp_filenames.items() if f.exists()}
 temp_evol_filenames = {f'{Z:.4f}': DATA_PATH / f'Z_{Z:.4f}evol_mergers.out' for Z in Zs}
 EVOL_FILENAMES = {Z: f for Z, f in temp_evol_filenames.items() if f.exists()}
 
-def plot_and_save(plotting_func, name_addon: str = ''):
+def plot_and_save(plotting_func, name_addon: str = '', folder='figures'):
     plotting_func()
     this_folder = Path()
     plt.savefig(
-        this_folder / (str(plotting_func.__name__).split(sep='.')[0] + name_addon + '.pdf'), 
+        this_folder / folder / (str(plotting_func.__name__).split(sep='.')[0] + name_addon + '.pdf'), 
         bbox_inches='tight', 
         pad_inches = 0
     )
@@ -75,7 +75,15 @@ def make_vid_varying_metallicity(
     frames_folder.rmdir()
     
 def plot_at_metallicity(plotting_func, selector=select_BBH, Z='0.0001'):
-    partial_func = partial(plotting_func, data=selector(read_file(FILENAMES[Z])))
+    data = selector(read_file(FILENAMES[Z]))
+    data.Z = Z
+    partial_func = partial(plotting_func, data=data)
     update_wrapper(partial_func, plotting_func)
     plt.title(f'Z={Z}')
     plot_and_save(partial_func, f'_Z={Z}')
+
+Zs = ['0.0001', '0.0030']
+
+def plot_at_desired_mets(plotting_func, selector=select_BBH, Zs=Zs):
+    for Z in Zs:
+        plot_at_metallicity(plotting_func, selector, Z)
