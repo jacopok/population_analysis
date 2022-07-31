@@ -71,18 +71,24 @@ def mass_ratios():
     
     for Z, fname in FILENAMES.items():
         data = select_BBH(read_file(fname))
-        plot_kde(data['m1form']/data['m2form'], 
-                 bins = np.linspace(0, 5, num=1000),
-                color=cmap(norm(float(Z))), 
-                alpha=.5
-            )
-
+        plot_kde(np.log(data['m1form']/data['m2form']), 
+                 bins = np.linspace(-1, np.log(10), num=1000),
+                 color=cmap(norm(float(Z))), 
+                 alpha=.5
+                )
+    
+    qs = np.linspace(1., 10, num=1000)
+    f_of_logq  = qs**(-0.9) / 0.9712305098006481
+    plt.plot(np.log(qs), f_of_logq, c='black', ls='--', lw=1., label='Input distribution')
+    
     plt.colorbar(ScalarMappable(cmap=cmap, norm=norm), label='Metallicity $Z$')
+    plt.gca().xaxis.set_major_formatter(lambda x, pos: f'${np.exp(x):.2g}$')
 
+    plt.legend()
     plt.xlabel("Mass ratio [primary/secondary]")
-    plt.axvline(1, c='black', ls=':', lw=1.)
-    plt.ylabel("Probability density")
-    plt.xlim(0, 4)
+    plt.axvline(0, c='black', ls=':', lw=1.)
+    plt.ylabel("Probability density per e-folding")
+    # plt.xlim(0, 4)
     
 def total_ZAMS_mass():
 
@@ -178,7 +184,8 @@ if __name__ == '__main__':
     
     # plt.savefig('merger_masses.pdf')
     # plt.close()
-    # plot_and_save(mass_ratios)
+    
+    plot_and_save(mass_ratios)
     # plot_and_save(total_ZAMS_mass)
     # plot_and_save(total_BBH_mass)
-    plot_and_save(merger_time)
+    # plot_and_save(merger_time)
